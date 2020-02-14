@@ -1,0 +1,7 @@
+.vscode
+*.pdb
+*.dll
+Intermediate
+Binaries
+!UE4Editor.modules
+!README*
