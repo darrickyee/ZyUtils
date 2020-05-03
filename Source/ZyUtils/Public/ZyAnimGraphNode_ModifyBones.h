@@ -4,20 +4,20 @@
 
 #include "CoreMinimal.h"
 #include "AnimGraphNode_Base.h"
-#include "ZyAnimNode_OffsetBones.h"
-#include "ZyAnimGraphNode_OffsetBones.generated.h"
+#include "ZyAnimNode_ModifyBones.h"
+#include "ZyAnimGraphNode_ModifyBones.generated.h"
 
 /**
  * 
  */
 UCLASS()
-class ZYUTILS_API UZyAnimGraphNode_OffsetBones : public UAnimGraphNode_Base
+class ZYUTILS_API UZyAnimGraphNode_ModifyBones : public UAnimGraphNode_Base
 {
 	GENERATED_BODY()
 
 public:
 	UPROPERTY(EditAnywhere, Category = SkeletalControl)
-	FZyAnimNode_OffsetBones Node;
+	FZyAnimNode_ModifyBones Node;
 
 	//~ Begin UEdGraphNode Interface.
 	virtual FText GetTooltipText() const override;
@@ -27,5 +27,5 @@ public:
 	virtual void CreateOutputPins() override;
 	//~ End UAnimGraphNode_Base Interface
 
-	UZyAnimGraphNode_OffsetBones(const FObjectInitializer &ObjectInitializer);
+	UZyAnimGraphNode_ModifyBones(const FObjectInitializer &ObjectInitializer);
 };

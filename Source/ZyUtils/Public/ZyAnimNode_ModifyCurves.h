@@ -5,29 +5,33 @@
 #include "CoreMinimal.h"
 #include "Animation/AnimNodeBase.h"
 #include "ZyFunctions.h"
-#include "ZyAnimNode_OffsetBones.generated.h"
+#include "ZyAnimNode_ModifyCurves.generated.h"
 
 /**
  * 
  */
 
 USTRUCT()
-struct ZYUTILS_API FZyAnimNode_OffsetBones : public FAnimNode_Base
+struct ZYUTILS_API FZyAnimNode_ModifyCurves : public FAnimNode_Base
 {
 	GENERATED_BODY()
 
 	UPROPERTY(EditAnywhere, Category = Links, meta = (PinShownByDefault))
 	FComponentSpacePoseLink ComponentPose;
 
-	/** Map of bone names to transform offsets */
+	/** Map of curve names to values */
 	UPROPERTY(EditAnywhere, Category = Settings, meta = (PinShownByDefault))
-	FBoneOffsets BoneOffsets;
+	FCurveValueMap CurveValueMap;
+
+	/** Replace curve value or add to input value */
+	UPROPERTY(EditAnywhere, Category = Settings, meta = (PinShownByDefault))
+	EModifyAnimMode Mode;
 
 	UPROPERTY(EditAnywhere, Category = Settings, meta = (PinShownByDefault))
-	TEnumAsByte<EBoneControlSpace> Space;
+	float Alpha;
 
 public:
-	FZyAnimNode_OffsetBones();
+	FZyAnimNode_ModifyCurves();
 	// FAnimNode_Base interface
 	virtual void Initialize_AnyThread(const FAnimationInitializeContext &Context) override;
 	virtual void CacheBones_AnyThread(const FAnimationCacheBonesContext &Context) override;

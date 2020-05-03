@@ -2,5 +2,4 @@
 *.pdb
 *.dll
 Intermediate
-!UE4Editor.modules
 !README*

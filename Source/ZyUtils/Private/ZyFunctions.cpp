@@ -2,17 +2,32 @@
 
 #include "ZyFunctions.h"
 
-void UZyFunctions::MakeBoneOffsets(const TMap<FName, FTransform> OffsetMap, FBoneOffsets &BoneOffsets)
+void UZyFunctions::MakeBoneTransformMap(const TMap<FName, FTransform> TransformMap, FBoneTransformMap &BoneTransformMap)
 {
 	TArray<FName> BoneNames;
 	TArray<FTransform> Transforms;
 
-	for (auto &entry : OffsetMap)
+	for (auto &entry : TransformMap)
 	{
 		BoneNames.Add(entry.Key);
 		Transforms.Add(entry.Value.ContainsNaN() ? FTransform::Identity : entry.Value);
 	}
 
-	BoneOffsets.BoneNames = BoneNames;
-	BoneOffsets.Transforms = Transforms;
+	BoneTransformMap.BoneNames = BoneNames;
+	BoneTransformMap.Transforms = Transforms;
+}
+
+void UZyFunctions::MakeCurveValueMap(const TMap<FName, float> CurveMap, FCurveValueMap &CurveValueMap)
+{
+	TArray<FName> CurveNames;
+	TArray<float> Values;
+
+	for (auto &entry : CurveMap)
+	{
+		CurveNames.Add(entry.Key);
+		Values.Add(isnan(entry.Value) ? 0.0 : entry.Value);
+	}
+
+	CurveValueMap.CurveNames = CurveNames;
+	CurveValueMap.Values = Values;
 }
