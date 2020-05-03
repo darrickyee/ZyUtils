@@ -2,4 +2,5 @@
 *.pdb
 *.dll
 Intermediate
+Binaries
 !README*
