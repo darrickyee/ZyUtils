@@ -20,7 +20,7 @@ enum class EModifyAnimMode : uint8
 	Replace
 };
 
-USTRUCT(BlueprintType, meta = (HasNativeMake = "ZyUtils.ZyFunctions.MakeBoneTransformMap"))
+USTRUCT(BlueprintType, meta = (HasNativeMake = "ZyUtils.ZyFunctions.MakeBoneTransformMap", HasNativeBreak = "ZyUtils.ZyFunctions.BreakBoneTransformMap"))
 struct FBoneTransformMap
 {
 	GENERATED_BODY()
@@ -32,7 +32,7 @@ struct FBoneTransformMap
 	TArray<FTransform> Transforms;
 };
 
-USTRUCT(BlueprintType, meta = (HasNativeMake = "ZyUtils.ZyFunctions.MakeCurveValueMap"))
+USTRUCT(BlueprintType, meta = (HasNativeMake = "ZyUtils.ZyFunctions.MakeCurveValueMap", HasNativeBreak = "ZyUtils.ZyFunctions.BreakCurveValueMap"))
 struct FCurveValueMap
 {
 	GENERATED_BODY()
@@ -50,12 +50,17 @@ class ZYUTILS_API UZyFunctions : public UBlueprintFunctionLibrary
 	GENERATED_BODY()
 
 public:
-	// Convert a Name: Transform mapping for use with OffsetBones anim node.
+	// Transform mapping for use with OffsetBones anim node.
 	UFUNCTION(BlueprintPure, Category = "ZyUtils", meta = (NativeMakeFunc, BlueprintThreadSafe))
 	static void MakeBoneTransformMap(const TMap<FName, FTransform> TransformMap, FBoneTransformMap &BoneTransformMap);
 
-	// Convert a Name: Transform mapping for use with SetCurves anim node.
+	UFUNCTION(BlueprintPure, Category = "ZyUtils", meta = (NativeBreakFunc, BlueprintThreadSafe))
+	static void BreakBoneTransformMap(const FBoneTransformMap BoneTransformMap, TMap<FName, FTransform> &TransformMap);
 
+	// Transform mapping for use with SetCurves anim node.
 	UFUNCTION(BlueprintPure, Category = "ZyUtils", meta = (NativeMakeFunc, BlueprintThreadSafe))
 	static void MakeCurveValueMap(const TMap<FName, float> CurveMap, FCurveValueMap &CurveValueMap);
+
+	UFUNCTION(BlueprintPure, Category = "ZyUtils", meta = (NativeBreakFunc, BlueprintThreadSafe))
+	static void BreakCurveValueMap(const FCurveValueMap CurveValueMap, TMap<FName, float> &CurveMap);
 };
