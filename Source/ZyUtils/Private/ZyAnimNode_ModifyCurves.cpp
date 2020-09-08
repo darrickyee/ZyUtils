@@ -30,30 +30,33 @@ void FZyAnimNode_ModifyCurves::EvaluateComponentSpace_AnyThread(FComponentSpaceP
 {
 	ComponentPose.EvaluateComponentSpace(Output);
 	USkeleton *Skeleton = Output.AnimInstanceProxy->GetSkeleton();
-	const float a = FMath::Clamp(Alpha, 0.f, 1.f);
-
-	for (int32 idx = 0; idx < CurveValueMap.CurveNames.Num(); idx++)
+	if (Skeleton)
 	{
-		FName crvName = CurveValueMap.CurveNames[idx];
-		SmartName::UID_Type crvUID = Skeleton->GetUIDByName(USkeleton::AnimCurveMappingName, crvName);
+		const float a = FMath::Clamp(Alpha, 0.f, 1.f);
 
-		if (crvUID != SmartName::MaxUID)
+		for (int32 idx = 0; idx < CurveValueMap.CurveNames.Num(); idx++)
 		{
-			float crvValue = CurveValueMap.Values.IsValidIndex(idx) ? CurveValueMap.Values[idx] : 0.f;
-			float lastCrvValue = Output.Curve.Get(crvUID);
+			FName crvName = CurveValueMap.CurveNames[idx];
+			SmartName::UID_Type crvUID = Skeleton->GetUIDByName(USkeleton::AnimCurveMappingName, crvName);
 
-			switch (Mode)
+			if (crvUID != SmartName::MaxUID)
 			{
-			case EModifyAnimMode::Add:
-				Output.Curve.Set(crvUID, a * crvValue + lastCrvValue);
-				break;
+				float crvValue = CurveValueMap.Values.IsValidIndex(idx) ? CurveValueMap.Values[idx] : 0.f;
+				float lastCrvValue = Output.Curve.Get(crvUID);
 
-			case EModifyAnimMode::Replace:
-				Output.Curve.Set(crvUID, a * crvValue);
-				break;
+				switch (Mode)
+				{
+				case EModifyAnimMode::Add:
+					Output.Curve.Set(crvUID, a * crvValue + lastCrvValue);
+					break;
 
-			default:
-				break;
+				case EModifyAnimMode::Replace:
+					Output.Curve.Set(crvUID, a * crvValue);
+					break;
+
+				default:
+					break;
+				}
 			}
 		}
 	}
