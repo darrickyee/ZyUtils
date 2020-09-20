@@ -26,7 +26,7 @@ USTRUCT(BlueprintType)
 struct FBoneModifier
 {
 	GENERATED_BODY()
-	
+
 	UPROPERTY(EditAnywhere, BlueprintReadWrite)
 	FName BoneName;
 
@@ -56,7 +56,6 @@ struct FBoneModifier
 
 	UPROPERTY(EditAnywhere, BlueprintReadWrite)
 	TEnumAsByte<EBoneControlSpace> ScaleSpace;
-
 };
 
 USTRUCT(BlueprintType)
@@ -66,9 +65,7 @@ struct FBoneModifierArray
 
 	UPROPERTY(EditAnywhere, BlueprintReadWrite)
 	TArray<FBoneModifier> BoneModifiers;
-
 };
-
 
 USTRUCT(BlueprintType, meta = (HasNativeMake = "ZyUtils.ZyFunctions.MakeBoneTransformMap", HasNativeBreak = "ZyUtils.ZyFunctions.BreakBoneTransformMap"))
 struct FBoneTransformMap

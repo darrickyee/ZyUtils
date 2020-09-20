@@ -9,7 +9,6 @@ FZyAnimNode_ModifyBones::FZyAnimNode_ModifyBones()
 	Alpha = 1.f;
 }
 
-
 void FZyAnimNode_ModifyBones::Initialize_AnyThread(const FAnimationInitializeContext &Context)
 {
 	ComponentPose.Initialize(Context);
@@ -28,70 +27,70 @@ void FZyAnimNode_ModifyBones::CacheBones_AnyThread(const FAnimationCacheBonesCon
 
 void FZyAnimNode_ModifyBones::ModifyTransform(int32 comp, FVector value, FTransform &Target, EModifyAnimMode Mode)
 {
-	if (Mode == EModifyAnimMode::Ignore) return;
+	if (Mode == EModifyAnimMode::Ignore)
+		return;
 
 	FQuat rot = FQuat(FRotator(value.Y, value.Z, value.X));
 
 	switch (comp)
 	{
-		// Scale
-		case 0:
-			switch (Mode)
-			{
-			case EModifyAnimMode::Add:
-				Target.MultiplyScale3D(value);
-				return;
+	// Scale
+	case 0:
+		switch (Mode)
+		{
+		case EModifyAnimMode::Add:
+			Target.MultiplyScale3D(value);
+			return;
 
-			case EModifyAnimMode::Replace:
-				Target.SetScale3D(value);
-				return;
+		case EModifyAnimMode::Replace:
+			Target.SetScale3D(value);
+			return;
 
-			default:
-				return;
-			}
+		default:
+			return;
+		}
 
-		case 1:
+	case 1:
 
-			switch (Mode)
-			{
-			case EModifyAnimMode::Add:
-				Target.ConcatenateRotation(rot);
-				Target.NormalizeRotation();
-				return;
+		switch (Mode)
+		{
+		case EModifyAnimMode::Add:
+			Target.ConcatenateRotation(rot);
+			Target.NormalizeRotation();
+			return;
 
-			case EModifyAnimMode::Replace:
-				Target.SetRotation(rot);
-				Target.NormalizeRotation();
-				return;
+		case EModifyAnimMode::Replace:
+			Target.SetRotation(rot);
+			Target.NormalizeRotation();
+			return;
 
-			default:
-				return;
-			}
+		default:
+			return;
+		}
 
-		case 2:
-			switch (Mode)
-			{
-			case EModifyAnimMode::Add:
-				Target.AddToTranslation(value);
-				return;
+	case 2:
+		switch (Mode)
+		{
+		case EModifyAnimMode::Add:
+			Target.AddToTranslation(value);
+			return;
 
-			case EModifyAnimMode::Replace:
-				Target.SetTranslation(value);
-				return;
+		case EModifyAnimMode::Replace:
+			Target.SetTranslation(value);
+			return;
 
-			default:
-				return;
-			}
-
+		default:
+			return;
+		}
 	}
 }
-
 
 void FZyAnimNode_ModifyBones::EvaluateComponentSpace_AnyThread(FComponentSpacePoseContext &Output)
 {
 	ComponentPose.EvaluateComponentSpace(Output);
 
-	if (BoneModifierArray.BoneModifiers.Num()) {
+	if (BoneModifierArray.BoneModifiers.Num())
+	{
 
 		// Get pose and component data
 		const FTransform ComponentTransform = Output.AnimInstanceProxy->GetComponentTransform();
@@ -103,7 +102,7 @@ void FZyAnimNode_ModifyBones::EvaluateComponentSpace_AnyThread(FComponentSpacePo
 		BoneModMap.Reset();
 
 		// Populate list of bones to be modified
-		for (FBoneModifier mbs: BoneModifierArray.BoneModifiers)
+		for (FBoneModifier mbs : BoneModifierArray.BoneModifiers)
 		{
 			int32 boneId = BoneContainer.GetPoseBoneIndexForBoneName(mbs.BoneName);
 
@@ -139,7 +138,6 @@ void FZyAnimNode_ModifyBones::EvaluateComponentSpace_AnyThread(FComponentSpacePo
 					EModifyAnimMode mode = EModifyAnimMode::Ignore;
 					EBoneControlSpace space = EBoneControlSpace::BCS_WorldSpace;
 
-
 					switch (comp)
 					{
 					case 0:
@@ -166,15 +164,11 @@ void FZyAnimNode_ModifyBones::EvaluateComponentSpace_AnyThread(FComponentSpacePo
 					ModifyTransform(comp, values, OutTransform, mode);
 
 					FAnimationRuntime::ConvertBoneSpaceTransformToCS(ComponentTransform, Output.Pose, OutTransform, FCompactPoseBoneIndex(boneId), space);
-
 				}
 
 				OutTransform.BlendWith(Output.Pose.GetComponentSpaceTransform(FCompactPoseBoneIndex(boneId)), 1 - a);
 				Output.Pose.SetComponentSpaceTransform(FCompactPoseBoneIndex(boneId), OutTransform);
-
 			}
 		}
-
 	}
-
 }
