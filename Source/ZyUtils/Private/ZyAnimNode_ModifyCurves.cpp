@@ -6,7 +6,6 @@
 
 FZyAnimNode_ModifyCurves::FZyAnimNode_ModifyCurves() : FAnimNode_Base()
 {
-	Mode = EModifyAnimMode::Add;
 	Alpha = 1.f;
 }
 
@@ -34,29 +33,43 @@ void FZyAnimNode_ModifyCurves::EvaluateComponentSpace_AnyThread(FComponentSpaceP
 	{
 		const float a = FMath::Clamp(Alpha, 0.f, 1.f);
 
-		for (int32 idx = 0; idx < CurveValueMap.CurveNames.Num(); idx++)
+		for (FCurveModifier crvmod : CurveModifierArray.CurveModifiers)
+		// for (int32 idx = 0; idx < CurveValueMap.CurveNames.Num(); idx++)
 		{
-			FName crvName = CurveValueMap.CurveNames[idx];
-			SmartName::UID_Type crvUID = Skeleton->GetUIDByName(USkeleton::AnimCurveMappingName, crvName);
+			SmartName::UID_Type crvUID = Skeleton->GetUIDByName(USkeleton::AnimCurveMappingName, crvmod.CurveName);
 
 			if (crvUID != SmartName::MaxUID)
 			{
-				float crvValue = CurveValueMap.Values.IsValidIndex(idx) ? CurveValueMap.Values[idx] : 0.f;
-				float lastCrvValue = Output.Curve.Get(crvUID);
+				float value = 0.f;
+				float lastValue = Output.Curve.Get(crvUID);
 
-				switch (Mode)
+				switch (crvmod.Mode)
 				{
-				case EModifyAnimMode::Add:
-					Output.Curve.Set(crvUID, a * crvValue + lastCrvValue);
+				case EModifyCurveMode::Add:
+					value = crvmod.Value + lastValue;
 					break;
 
-				case EModifyAnimMode::Replace:
-					Output.Curve.Set(crvUID, a * crvValue);
+				case EModifyCurveMode::Replace:
+					value = crvmod.Value;
+					break;
+
+				case EModifyCurveMode::Min:
+					value = std::min(value, lastValue);
+					break;
+
+				case EModifyCurveMode::Max:
+					value = std::max(value, lastValue);
+					break;
+
+				case EModifyCurveMode::Average:
+					value = (value + lastValue) / 2.f;
 					break;
 
 				default:
 					break;
 				}
+
+				Output.Curve.Set(crvUID, a * value + (1 - a) * lastValue);
 			}
 		}
 	}

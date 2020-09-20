@@ -1,5 +1,6 @@
 // Fill out your copyright notice in the Description page of Project Settings.
 
+/*
 #include "ZyFunctions.h"
 
 void UZyFunctions::MakeBoneTransformMap(const TMap<FName, FTransform> TransformMap, FBoneTransformMap &BoneTransformMap)
@@ -55,3 +56,4 @@ void UZyFunctions::BreakCurveValueMap(const FCurveValueMap CurveValueMap, TMap<F
 		CurveMap.Add(CurveNames[i], val);
 	}
 }
+*/

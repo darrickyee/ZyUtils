@@ -19,13 +19,8 @@ struct ZYUTILS_API FZyAnimNode_ModifyCurves : public FAnimNode_Base
 	UPROPERTY(EditAnywhere, Category = Links, meta = (PinShownByDefault))
 	FComponentSpacePoseLink ComponentPose;
 
-	/** Map of curve names to values */
 	UPROPERTY(EditAnywhere, Category = Settings, meta = (PinShownByDefault))
-	FCurveValueMap CurveValueMap;
-
-	/** Replace curve value or add to input value */
-	UPROPERTY(EditAnywhere, Category = Settings, meta = (PinShownByDefault))
-	EModifyAnimMode Mode;
+	FCurveModifierArray CurveModifierArray;
 
 	UPROPERTY(EditAnywhere, Category = Settings, meta = (PinShownByDefault))
 	float Alpha;

@@ -10,7 +10,7 @@
  * 
  */
 
-UENUM()
+UENUM(BlueprintType)
 enum class EModifyAnimMode : uint8
 {
 	Ignore,
@@ -20,6 +20,26 @@ enum class EModifyAnimMode : uint8
 
 	/** Replace input value with new value */
 	Replace
+};
+
+UENUM(BlueprintType)
+enum class EModifyCurveMode : uint8
+{
+
+	/** Add new value to input curve value */
+	Add,
+
+	/** Replace input value with new value */
+	Replace,
+
+	/** Minimum of input value and new value */
+	Min,
+
+	/** Maximum of input value and new value */
+	Max,
+
+	/** Average of input value and new value */
+	Average
 };
 
 USTRUCT(BlueprintType)
@@ -67,36 +87,39 @@ struct FBoneModifierArray
 	TArray<FBoneModifier> BoneModifiers;
 };
 
-USTRUCT(BlueprintType, meta = (HasNativeMake = "ZyUtils.ZyFunctions.MakeBoneTransformMap", HasNativeBreak = "ZyUtils.ZyFunctions.BreakBoneTransformMap"))
-struct FBoneTransformMap
+USTRUCT(BlueprintType)
+struct FCurveModifier
 {
 	GENERATED_BODY()
 
 	UPROPERTY(EditAnywhere, BlueprintReadWrite)
-	TArray<FName> BoneNames;
+	FName CurveName;
 
 	UPROPERTY(EditAnywhere, BlueprintReadWrite)
-	TArray<FTransform> Transforms;
+	float Value;
+
+	UPROPERTY(EditAnywhere, BlueprintReadWrite)
+	TEnumAsByte<EModifyCurveMode> Mode;
 };
 
-USTRUCT(BlueprintType, meta = (HasNativeMake = "ZyUtils.ZyFunctions.MakeCurveValueMap", HasNativeBreak = "ZyUtils.ZyFunctions.BreakCurveValueMap"))
-struct FCurveValueMap
+USTRUCT(BlueprintType)
+struct FCurveModifierArray
 {
 	GENERATED_BODY()
 
 	UPROPERTY(EditAnywhere, BlueprintReadWrite)
-	TArray<FName> CurveNames;
-
-	UPROPERTY(EditAnywhere, BlueprintReadWrite)
-	TArray<float> Values;
+	TArray<FCurveModifier> CurveModifiers;
 };
 
+/*
 UCLASS()
 class ZYUTILS_API UZyFunctions : public UBlueprintFunctionLibrary
 {
 	GENERATED_BODY()
 
 public:
+	
+
 	// Transform mapping for use with OffsetBones anim node.
 	UFUNCTION(BlueprintPure, Category = "ZyUtils", meta = (NativeMakeFunc, BlueprintThreadSafe))
 	static void MakeBoneTransformMap(const TMap<FName, FTransform> TransformMap, FBoneTransformMap &BoneTransformMap);
@@ -110,4 +133,6 @@ public:
 
 	UFUNCTION(BlueprintPure, Category = "ZyUtils", meta = (NativeBreakFunc, BlueprintThreadSafe))
 	static void BreakCurveValueMap(const FCurveValueMap CurveValueMap, TMap<FName, float> &CurveMap);
+
 };
+*/
