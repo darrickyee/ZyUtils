@@ -13,12 +13,62 @@
 UENUM()
 enum class EModifyAnimMode : uint8
 {
+	Ignore,
+
 	/** Add new value to input curve value */
 	Add,
 
 	/** Replace input value with new value */
 	Replace
 };
+
+USTRUCT(BlueprintType)
+struct FBoneModifier
+{
+	GENERATED_BODY()
+	
+	UPROPERTY(EditAnywhere, BlueprintReadWrite)
+	FName BoneName;
+
+	UPROPERTY(EditAnywhere, BlueprintReadWrite)
+	FVector Translation;
+
+	UPROPERTY(EditAnywhere, BlueprintReadWrite)
+	TEnumAsByte<EModifyAnimMode> TranslationMode;
+
+	UPROPERTY(EditAnywhere, BlueprintReadWrite)
+	TEnumAsByte<EBoneControlSpace> TranslationSpace;
+
+	UPROPERTY(EditAnywhere, BlueprintReadWrite)
+	FRotator Rotation;
+
+	UPROPERTY(EditAnywhere, BlueprintReadWrite)
+	TEnumAsByte<EModifyAnimMode> RotationMode;
+
+	UPROPERTY(EditAnywhere, BlueprintReadWrite)
+	TEnumAsByte<EBoneControlSpace> RotationSpace;
+
+	UPROPERTY(EditAnywhere, BlueprintReadWrite)
+	FVector Scale;
+
+	UPROPERTY(EditAnywhere, BlueprintReadWrite)
+	TEnumAsByte<EModifyAnimMode> ScaleMode;
+
+	UPROPERTY(EditAnywhere, BlueprintReadWrite)
+	TEnumAsByte<EBoneControlSpace> ScaleSpace;
+
+};
+
+USTRUCT(BlueprintType)
+struct FBoneModifierArray
+{
+	GENERATED_BODY()
+
+	UPROPERTY(EditAnywhere, BlueprintReadWrite)
+	TArray<FBoneModifier> BoneModifiers;
+
+};
+
 
 USTRUCT(BlueprintType, meta = (HasNativeMake = "ZyUtils.ZyFunctions.MakeBoneTransformMap", HasNativeBreak = "ZyUtils.ZyFunctions.BreakBoneTransformMap"))
 struct FBoneTransformMap

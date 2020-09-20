@@ -19,15 +19,8 @@ struct ZYUTILS_API FZyAnimNode_ModifyBones : public FAnimNode_Base
 	UPROPERTY(EditAnywhere, Category = Links, meta = (PinShownByDefault))
 	FComponentSpacePoseLink ComponentPose;
 
-	/** Map of bone names to transform offsets */
 	UPROPERTY(EditAnywhere, Category = Settings, meta = (PinShownByDefault))
-	FBoneTransformMap BoneTransformMap;
-
-	UPROPERTY(EditAnywhere, Category = Settings, meta = (PinShownByDefault))
-	TEnumAsByte<EBoneControlSpace> Space;
-
-	UPROPERTY(EditAnywhere, Category = Settings, meta = (PinShownByDefault))
-	EModifyAnimMode Mode;
+	FBoneModifierArray BoneModifierArray;
 
 	UPROPERTY(EditAnywhere, Category = Settings, meta = (PinShownByDefault))
 	float Alpha;
@@ -40,4 +33,7 @@ public:
 	virtual void Update_AnyThread(const FAnimationUpdateContext &Context) override;
 	virtual void EvaluateComponentSpace_AnyThread(FComponentSpacePoseContext &Output) override;
 	// End of FAnimNode_Base interface
+
+private:
+	void ModifyTransform(int32 prop, FVector value, FTransform &Target, EModifyAnimMode Mode);
 };
