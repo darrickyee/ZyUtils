@@ -91,45 +91,46 @@ void FZyAnimNode_ModifyBones::EvaluateComponentSpace_AnyThread(FComponentSpacePo
 
 	if (BoneModifierArray.BoneModifiers.Num())
 	{
-
-		// Get pose and component data
-		const FTransform ComponentTransform = Output.AnimInstanceProxy->GetComponentTransform();
-		const FCompactPose &CompactPose = Output.Pose.GetPose();
-		const FBoneContainer &BoneContainer = CompactPose.GetBoneContainer();
-
-		// Map of Bone IDs to MBS values
-		TMap<int32, FBoneModifier> BoneModMap;
-		BoneModMap.Reset();
+		TArray<FBoneModifier> bma = BoneModifierArray.BoneModifiers;
 
 		// Populate list of bones to be modified
-		for (FBoneModifier mbs : BoneModifierArray.BoneModifiers)
+		const FBoneContainer &BoneContainer = Output.Pose.GetPose().GetBoneContainer();
+
+		TArray<FBoneModifier> Modifiers;
+		TMap<FName, int32> BoneIdMap;
+
+		for (FBoneModifier boneMod : bma)
 		{
-			int32 boneId = BoneContainer.GetPoseBoneIndexForBoneName(mbs.BoneName);
+			int32 boneId = BoneContainer.GetPoseBoneIndexForBoneName(boneMod.BoneName);
 
 			if (boneId != INDEX_NONE)
 			{
-				BoneModMap.Add(boneId, mbs);
+				Modifiers.Add(boneMod);
+				BoneIdMap.Add(boneMod.BoneName, boneId);
 			}
 		}
 
-		if (BoneModMap.Num())
+		if (Modifiers.Num())
 		{
 			float a = FMath::Clamp(Alpha, 0.f, 1.f);
 
+			// Get pose and component data
+			const FTransform ComponentTransform = Output.AnimInstanceProxy->GetComponentTransform();
+
 			// Sort keys by hierarchy
-			TArray<int32> BoneKeys;
-			BoneModMap.GetKeys(BoneKeys);
-			BoneKeys.Sort([BoneContainer](const int32 A, const int32 B) {
-				return BoneContainer.BoneIsChildOf(B, A);
+			Modifiers.Sort([BoneContainer, BoneIdMap, bma](FBoneModifier A, FBoneModifier B) {
+				if (A.BoneName == B.BoneName)
+					return bma.Find(A) < bma.Find(B);
+
+				return BoneContainer.BoneIsChildOf(BoneIdMap[B.BoneName], BoneIdMap[A.BoneName]);
 			});
 
 			// Modify transforms in order
-			for (int32 boneId : BoneKeys)
+			for (FBoneModifier boneMod : Modifiers)
 			{
+				int32 boneId = BoneContainer.GetPoseBoneIndexForBoneName(boneMod.BoneName);
 				// Target transform copy
 				FTransform OutTransform = Output.Pose.GetComponentSpaceTransform(FCompactPoseBoneIndex(boneId));
-
-				FBoneModifier mbs = BoneModMap[boneId];
 
 				// 0: Scale, 1: Rotate, 2: Translate
 				for (int32 comp = 0; comp < 3; ++comp)
@@ -141,21 +142,21 @@ void FZyAnimNode_ModifyBones::EvaluateComponentSpace_AnyThread(FComponentSpacePo
 					switch (comp)
 					{
 					case 0:
-						values = mbs.Scale;
-						mode = mbs.ScaleMode;
-						space = mbs.ScaleSpace;
+						values = boneMod.Scale;
+						mode = boneMod.ScaleMode;
+						space = boneMod.ScaleSpace;
 						break;
 
 					case 1:
-						values = FVector(mbs.Rotation.Roll, mbs.Rotation.Pitch, mbs.Rotation.Yaw);
-						mode = mbs.RotationMode;
-						space = mbs.RotationSpace;
+						values = FVector(boneMod.Rotation.Roll, boneMod.Rotation.Pitch, boneMod.Rotation.Yaw);
+						mode = boneMod.RotationMode;
+						space = boneMod.RotationSpace;
 						break;
 
 					case 2:
-						values = mbs.Translation;
-						mode = mbs.TranslationMode;
-						space = mbs.TranslationSpace;
+						values = boneMod.Translation;
+						mode = boneMod.TranslationMode;
+						space = boneMod.TranslationSpace;
 						break;
 					}
 
@@ -169,6 +170,10 @@ void FZyAnimNode_ModifyBones::EvaluateComponentSpace_AnyThread(FComponentSpacePo
 				OutTransform.BlendWith(Output.Pose.GetComponentSpaceTransform(FCompactPoseBoneIndex(boneId)), 1 - a);
 				Output.Pose.SetComponentSpaceTransform(FCompactPoseBoneIndex(boneId), OutTransform);
 			}
-		}
+				}
+
+		Modifiers.Empty();
+		BoneIdMap.Empty();
+		bma.Empty();
 	}
 }

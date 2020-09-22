@@ -78,6 +78,20 @@ struct FBoneModifier
 	TEnumAsByte<EBoneControlSpace> ScaleSpace;
 };
 
+static bool operator==(const FBoneModifier &A, const FBoneModifier &B)
+{
+	return A.BoneName == B.BoneName
+		&& A.Translation == B.Translation
+		&& A.TranslationMode == B.TranslationMode
+		&& A.TranslationSpace == B.TranslationSpace
+		&& A.Rotation == B.Rotation
+		&& A.RotationMode == B.RotationMode
+		&& A.RotationSpace == B.RotationSpace
+		&& A.Scale == B.Scale
+		&& A.ScaleMode == B.ScaleMode
+		&& A.ScaleSpace == B.ScaleSpace;
+};
+
 USTRUCT(BlueprintType)
 struct FBoneModifierArray
 {
