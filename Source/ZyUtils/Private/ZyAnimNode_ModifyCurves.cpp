@@ -1,9 +1,9 @@
 // Fill out your copyright notice in the Description page of Project Settings.
 
-#include <algorithm>
 #include "ZyAnimNode_ModifyCurves.h"
 #include "Animation/AnimInstanceProxy.h"
 #include "AnimationRuntime.h"
+#include <algorithm>
 
 FZyAnimNode_ModifyCurves::FZyAnimNode_ModifyCurves() : FAnimNode_Base()
 {
