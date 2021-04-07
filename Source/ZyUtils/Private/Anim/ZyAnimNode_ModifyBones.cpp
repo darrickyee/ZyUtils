@@ -1,6 +1,6 @@
 // Fill out your copyright notice in the Description page of Project Settings.
 
-#include "ZyAnimNode_ModifyBones.h"
+#include "Anim/ZyAnimNode_ModifyBones.h"
 #include "Animation/AnimInstanceProxy.h"
 #include "AnimationRuntime.h"
 

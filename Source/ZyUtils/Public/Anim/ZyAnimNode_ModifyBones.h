@@ -4,7 +4,7 @@
 
 #include "CoreMinimal.h"
 #include "Animation/AnimNodeBase.h"
-#include "ZyFunctions.h"
+#include "ZyAnimData.h"
 #include "ZyAnimNode_ModifyBones.generated.h"
 
 /**

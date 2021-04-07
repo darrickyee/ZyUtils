@@ -1,6 +1,6 @@
 // Fill out your copyright notice in the Description page of Project Settings.
 
-#include "ZyAnimNode_ModifyCurves.h"
+#include "Anim/ZyAnimNode_ModifyCurves.h"
 #include "Animation/AnimInstanceProxy.h"
 #include "AnimationRuntime.h"
 #include <algorithm>

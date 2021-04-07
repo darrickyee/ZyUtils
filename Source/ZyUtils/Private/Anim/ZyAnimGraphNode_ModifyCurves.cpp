@@ -1,6 +1,6 @@
 // Fill out your copyright notice in the Description page of Project Settings.
 
-#include "ZyAnimGraphNode_ModifyCurves.h"
+#include "Anim/ZyAnimGraphNode_ModifyCurves.h"
 #include "AnimationGraphSchema.h"
 
 FText UZyAnimGraphNode_ModifyCurves::GetTooltipText() const

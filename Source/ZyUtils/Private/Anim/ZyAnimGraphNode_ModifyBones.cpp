@@ -1,11 +1,11 @@
 // Fill out your copyright notice in the Description page of Project Settings.
 
-#include "ZyAnimGraphNode_ModifyBones.h"
+#include "Anim/ZyAnimGraphNode_ModifyBones.h"
 #include "AnimationGraphSchema.h"
 
 FText UZyAnimGraphNode_ModifyBones::GetTooltipText() const
 {
-	return FText::FromString("Transform multiple bones in selected space.");
+	return FText::FromString("Transform/modify multiple bones in selected space.  Applies modifications in skeletal hierarchy order.");
 }
 
 FText UZyAnimGraphNode_ModifyBones::GetNodeTitle(ENodeTitleType::Type TitleType) const
