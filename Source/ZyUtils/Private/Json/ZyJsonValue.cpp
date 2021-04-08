@@ -1,6 +1,7 @@
 
 #include "Json/ZyJsonValue.h"
 
+
 EZyJsonType FZyJsonValue::GetType() const
 {
 	if (!JsonValue.IsValid()) return EZyJsonType::None;

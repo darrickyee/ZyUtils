@@ -26,6 +26,10 @@ public:
 	FZyJsonValue(const TSharedPtr<FJsonValue> &InValue) : JsonValue(InValue) {};
 	FZyJsonValue(const TSharedPtr<FJsonObject> &InValue) : JsonValue(MakeShareable(new FJsonValueObject(InValue))) {};
 
+	bool AsBool() const { return JsonValue->AsBool(); };
+	float AsNumber() const { return (float)JsonValue->AsNumber(); };
+	FString AsString() const { return JsonValue->AsString(); };
+
 	EZyJsonType GetType() const;
 
 	TSharedPtr<FJsonValue> JsonValue;

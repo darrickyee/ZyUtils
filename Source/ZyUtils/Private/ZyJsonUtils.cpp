@@ -19,6 +19,7 @@ void UZyJsonUtils::ParseJSON(const FString& JsonString, FZyJsonValue& JsonValue,
 	const TSharedRef<TJsonReader<TCHAR>> Reader = TJsonReaderFactory<TCHAR>::Create(Input);
 
 	Success = FJsonSerializer::Deserialize(Reader, JsonValue.JsonValue) && JsonValue.JsonValue.IsValid();
+		
 	// Return null value (with valid pointer) if failed to parse
 	if (!Success)
 	{
