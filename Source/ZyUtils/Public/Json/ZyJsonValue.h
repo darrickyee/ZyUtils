@@ -15,8 +15,7 @@ struct ZYUTILS_API FZyJsonValue
 
 public:
 
-	friend class UZyJsonUtils;
-	friend class FZyJsonObject;
+	//friend class UZyJsonUtils;
 
 	FZyJsonValue() : JsonValue(MakeShareable(new FJsonValueNull())) {};
 	FZyJsonValue(bool InValue) : JsonValue(MakeShareable(new FJsonValueBoolean(InValue))) {};
@@ -24,10 +23,10 @@ public:
 	FZyJsonValue(float InValue) : JsonValue(MakeShareable(new FJsonValueNumber(InValue))) {};
 	FZyJsonValue(const char* InValue) : FZyJsonValue(FString(InValue)) {};
 	FZyJsonValue(const FString &InValue) : JsonValue(MakeShareable(new FJsonValueString(InValue))) {};
-	FZyJsonValue(const TSharedPtr<FJsonObject> InValue) : JsonValue(MakeShareable(new FJsonValueObject(InValue))) {};
+	FZyJsonValue(const TSharedPtr<FJsonValue> &InValue) : JsonValue(InValue) {};
+	FZyJsonValue(const TSharedPtr<FJsonObject> &InValue) : JsonValue(MakeShareable(new FJsonValueObject(InValue))) {};
 
 	EZyJsonType GetType() const;
 
-protected:
 	TSharedPtr<FJsonValue> JsonValue;
 };

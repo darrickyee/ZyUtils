@@ -19,9 +19,9 @@ public:
 
 	FZyJsonObject() : JsonObject(MakeShareable(new FJsonObject())) {};
 
-	void SetValue(const FString& Key, const FZyJsonValue& Value);
+	void SetValue(const FString& Key, const FZyJsonValue& Value) const;
 
-	FZyJsonValue GetValue(const FString& Key);
+	FZyJsonValue GetValue(const FString& Key) const;
 
 protected:
 	TSharedPtr<FJsonObject> JsonObject;
